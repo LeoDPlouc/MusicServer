@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MusicServer.Beans;
+using System;
+using System.IO;
 
 namespace MusicServer
 {
@@ -6,7 +8,8 @@ namespace MusicServer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if (!Directory.Exists("SongData"))
+                Directory.CreateDirectory("SongData");
         }
     }
 }
