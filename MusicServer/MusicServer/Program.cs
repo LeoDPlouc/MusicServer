@@ -10,6 +10,8 @@ namespace MusicServer
         {
             if (!Directory.Exists("SongData"))
                 Directory.CreateDirectory("SongData");
+
+            Server.Start();
         }
     }
 }
