@@ -16,6 +16,7 @@ namespace MusicServer.Beans
         public string Title { get; set; }
         public string Album { get; set; }
         public string Artist { get; set; }
+        public bool Like { get; set; }
         public bool Heart { get; set; }
         public string Path { get; set; }
         public string Host { get; set; }
@@ -23,8 +24,8 @@ namespace MusicServer.Beans
 
         public override string ToString()
         {
-            return string.Format("Title : {0}, Album : {1}, Artist : {2}, Heart : {3}, Path : {4}, Host : {5}, AcousticId : {6}",
-                Title, Album, Artist, Heart, Path, Host, AcousticId);
+            return string.Format("Title : {0}, Album : {1}, Artist : {2}, Like : {3}, Heart : {4}, Path : {5}, Host : {6}, AcousticId : {7}",
+                Title, Album, Artist, Like, Heart, Path, Host, AcousticId);
         }
         public async Task Save()
         {
