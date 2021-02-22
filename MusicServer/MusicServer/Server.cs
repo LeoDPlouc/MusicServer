@@ -24,25 +24,40 @@ namespace MusicServer
             while (true)
             {
                 HttpListenerContext context = listener.GetContext();
-                string url = context.Request.RawUrl;
-                if (url.StartsWith("/song/"))
+                try
                 {
-                    if (context.Request.HttpMethod == "GET")
-                        getSong(context);
+                    string url = context.Request.RawUrl;
+                    if (url.StartsWith("/song/"))
+                    {
+                        if (context.Request.HttpMethod == "GET")
+                            getSong(context);
+                        if (context.Request.HttpMethod == "POST")
+                            postSong(context);
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
                 }
             }
         }
         private static async void postSong(HttpListenerContext context)
         {
-            JsonDocument json = processBody(context.Request);
-            Song song = await Song.Load(json.ToString());
+            Console.WriteLine("POST");
+
+            string json = processBody(context.Request);
+            Song song = Song.Parse(json);
 
             await song.Save();
+            context.Response.Close();
         }
 
         private static void getSong(HttpListenerContext context)
         {
             string acousticId = HttpUtility.ParseQueryString(context.Request.Url.Query).Get("acousticId");
+
+            Console.WriteLine("GET " + acousticId);
 
             string songData = getJSONFile("SongData/" + acousticId);
 
@@ -55,7 +70,7 @@ namespace MusicServer
             context.Response.Close();
 
         }
-        private static JsonDocument processBody(HttpListenerRequest req)
+        private static string processBody(HttpListenerRequest req)
         {
             string json;
             using (var stream = new StreamReader(req.InputStream))
@@ -63,7 +78,7 @@ namespace MusicServer
                 json = stream.ReadToEnd();
             }
 
-            return JsonDocument.Parse(json);
+            return json;
         }
 
         private static string getJSONFile(string path)

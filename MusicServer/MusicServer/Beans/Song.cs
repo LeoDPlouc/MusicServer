@@ -35,6 +35,11 @@ namespace MusicServer.Beans
             }
         }
 
+        public static Song Parse(string json)
+        {
+            return (Song)JsonSerializer.Deserialize(json, typeof(Song));
+        }
+
         public static async Task<Song> Load(string AcousticID)
         {
             using(var fs = File.OpenRead("SongData/" + AcousticID))
